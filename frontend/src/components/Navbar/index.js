@@ -5,7 +5,7 @@ import { Button } from "@chakra-ui/react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useBasket } from "../../contexts/BasketContext";
 
-function Navbar() {
+function Navbar({ isSignInVisible, setIsSignInVisible }) {
   const { loggedIn, user } = useAuth();
   const { items } = useBasket();
 
@@ -22,7 +22,7 @@ function Navbar() {
         </ul>
       </div>
       <div className={styles.right}>
-        {!loggedIn && (
+        {!isSignInVisible && (
           <>
             <Link to="/signin">
               <Button colorScheme="pink" variant="ghost">
@@ -32,6 +32,19 @@ function Navbar() {
             <Link to="/signup">
               <Button colorScheme="pink" variant="ghost">
                 Sign Up
+              </Button>
+            </Link>
+          </>
+        )}
+        {isSignInVisible && (
+          <>
+            <Link to="/">
+              <Button
+                colorScheme="pink"
+                variant="ghost"
+                onClick={() => setIsSignInVisible(false)}
+              >
+                Logout
               </Button>
             </Link>
           </>

@@ -14,13 +14,12 @@ import Orders from "./pages/Admin/Orders";
 import AdminProducts from "./pages/Admin/AdminProducts";
 import AdminProductDetail from "./pages/Admin/AdminProductDetail";
 import NewProduct from "./pages/Products/New";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/react";
 
 function App() {
   useEffect(() => {
     const ENV = ["production", "dev", "staging"][Math.floor(Math.random() * 3)];
-
 
     Sentry.init({
       dsn: "https://c6a312ca62353f8d6a1a96860a4c1840@o4508349255778304.ingest.de.sentry.io/4508349259448400",
@@ -38,14 +37,66 @@ function App() {
       replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
     });
   }, []);
+  const [isSignInVisible, setIsSignInVisible] = useState("");
+  const data = [
+    {
+      id: "1",
+      title: "iPhone 14",
+      description: "Latest model of the iPhone series.",
+      price: 999.99,
+      photos: [],
+      createdAt: "2024-11-26T00:00:00.000Z",
+    },
+    {
+      id: "2",
+      title: "Samsung Galaxy S23",
+      description: "Flagship Samsung smartphone with advanced features.",
+      price: 899.99,
+      photos: [],
+      createdAt: "2024-11-26T00:00:00.000Z",
+    },
+    {
+      id: "3",
+      title: "Google Pixel 8",
+      description: "Google's latest Pixel phone with pure Android experience.",
+      price: 799.99,
+      photos: [],
+      createdAt: "2024-11-26T00:00:00.000Z",
+    },
+    {
+      id: "4",
+      title: "Dell XPS 15",
+      description: "High-performance laptop for professionals.",
+      price: 1499.99,
+      photos: [],
+      createdAt: "2024-11-26T00:00:00.000Z",
+    },
+    {
+      id: "5",
+      title: "Sony WH-1000XM5",
+      description: "Noise-cancelling headphones with excellent sound quality.",
+      price: 399.99,
+      photos: [],
+      createdAt: "2024-11-26T00:00:00.000Z",
+    },
+  ];
   return (
     <>
-      <Navbar />
+      <Navbar
+        isSignInVisible={isSignInVisible}
+        setIsSignInVisible={setIsSignInVisible}
+      />
       <div id="content">
         <Routes>
-          <Route path="/" exect index element={<Products />} />
-          <Route path="/product/:product_id" element={<ProductDetail />} />
-          <Route path="/signin" element={<Signin />} />
+          <Route path="/" exect index element={<Products data={data} />} />
+          <Route
+            path="/product/:product_id"
+            element={<ProductDetail data={data} />}
+          />
+          <Route
+            path="/signin"
+            element={<Signin setIsSignInVisible={setIsSignInVisible} />}
+          />
           <Route path="/signup" element={<Signup />} />
           <Route path="/basket" element={<Basket />} />
           <Route path="/profile" element={<ProductedProfile />} />

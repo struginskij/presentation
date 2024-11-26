@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Flex,
   Box,
@@ -14,29 +14,32 @@ import { fetchLogin } from "../../../api";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-function Signin({ history }) {
-  const { login } = useAuth();
+function Signin({ setIsSignInVisible }) {
+  // const { login } = useAuth();
   let navigate = useNavigate();
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    // validationSchema,
-    onSubmit: async (values, bag) => {
-      try {
-        const loginResponse = await fetchLogin({
-          email: values.email,
-          password: values.password,
-        });
-        login(loginResponse);
-        navigate("/");
-      } catch (e) {
-        bag.setErrors({ general: e.response.data.message });
-      }
-    },
-  });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     email: "",
+  //     password: "",
+  //   },
+  //   // validationSchema,
+  //   onSubmit: async (values, bag) => {
+  //     try {
+  //       const loginResponse = await fetchLogin({
+  //         email: values.email,
+  //         password: values.password,
+  //       });
+  //       login(loginResponse);
+  //       console.log(values.email, "email");
+  //       navigate("/");
+  //     } catch (e) {
+  //       bag.setErrors({ general: e.response.data.message });
+  //     }
+  //   },
+  // });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <div>
       <Flex align="center" width="full" justifyContent="center">
@@ -45,20 +48,27 @@ function Signin({ history }) {
             <Heading>Sign In</Heading>
           </Box>
           <Box my={5}>
-            {formik.errors.general && (
-              <Alert status="error">{formik.errors.general}</Alert>
-            )}
+            {/* {formik.errors.general && (
+              <Alert status="error">{formik.errors.general}</Alert> */}
+            {/* )} */}
           </Box>
           <Box my={5} textAlign="left">
-            <form onSubmit={formik.handleSubmit}>
+            <form
+              onSubmit={() => {
+                if (password === "admin" && email === "admin") {
+                  navigate("/");
+                  setIsSignInVisible(true);
+                } else {
+                  throw new Error("Incorrect credentials");
+                }
+              }}
+            >
               <FormControl>
                 <FormLabel>E-mail</FormLabel>
                 <Input
                   name="email"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                  isInvalid={formik.touched.email && formik.errors.email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                 />
               </FormControl>
 
@@ -67,10 +77,8 @@ function Signin({ history }) {
                 <Input
                   name="password"
                   type="password"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.password}
-                  isInvalid={formik.touched.password && formik.errors.password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                 />
               </FormControl>
 

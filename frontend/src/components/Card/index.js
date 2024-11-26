@@ -17,7 +17,8 @@ import { useBasket } from "../../contexts/BasketContext";
 
 function Cards({ item }) {
   const { addToBasket, items } = useBasket();
-  const photoUrl = item.photos[0] || "https://placehold.co/300x300?text=No+Image";
+  const photoUrl =
+    item.photos[0] || "https://placehold.co/300x300?text=No+Image";
 
   const findBasketItem = items.find(
     (basket_item) => basket_item._id === item._id
@@ -25,7 +26,7 @@ function Cards({ item }) {
 
   return (
     <Card maxW="sm">
-      <Link to={`/product/${item._id}`}>
+      <Link to={`/product/${item.id}`}>
         <CardBody>
           <Image
             src={photoUrl}
